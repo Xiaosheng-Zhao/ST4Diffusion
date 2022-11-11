@@ -19,6 +19,10 @@ import numpy as np
 from loader import TextImageDataset
 from create_model import create_nnmodel
 
+
+"""
+https://github.com/fuxuelinwudi/2022-gaiic-track1-itmatch-baseline2022.3.2/blob/main/src/utils/classifier_utils.py
+"""
 class EMA:
     def __init__(self, model, decay):
         self.model = model
