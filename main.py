@@ -3,6 +3,9 @@ This script is mainly built upon:
 Conditional Diffusion MNIST, https://github.com/TeaPearce/Conditional_Diffusion_MNIST
 GLIDE, https://github.com/openai/glide-text2im
 glide-finetune, https://github.com/afiaka87/glide-finetune
+other reference:
+guided-diffusion: https://github.com/openai/guided-diffusion
+improved-diffusion: https://github.com/openai/improved-diffusion
 """
 import os
 
