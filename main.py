@@ -162,7 +162,7 @@ class DDPM(nn.Module):
 def train_eor():
 
     ## hardcoding these here
-    n_epoch = 120 # 120
+    n_epoch = 160 # 120
     batch_size =16 # 16
     n_T = 500 # 500; DDPM time steps
     device = "cuda" # using gpu
@@ -177,6 +177,10 @@ def train_eor():
     drop_prob = 0.28 # the probability to drop the captions (parameters) for unconditional training in classifier free guidance.
     image_size=64
     data_dir = '/scratch/zxs/scripts/Diffuse/glide-finetune/data'
+    save_freq = 40 # the period of saving model
+    sample_freq = 10 # the period of sampling
+    ema=True # whether to use ema
+    ema_rate=0.999
 
     nn_model=create_nnmodel(n_param=n_param,image_size=image_size)
     ddpm = DDPM(nn_model=nn_model, betas=(1e-4, 0.02), n_T=n_T, device=device, drop_prob=drop_prob)
@@ -211,9 +215,10 @@ def train_eor():
     
     # initialize optimizer
     optim = torch.optim.Adam(ddpm.parameters(), lr=lrate)
-
-    ema = EMA(ddpm, 0.999)
-    ema.register()
+    
+    if ema:
+        ema = EMA(ddpm, ema_rate)
+        ema.register()
     for ep in range(n_epoch):
         print(f'epoch {ep}')
         ddpm.train()
@@ -222,38 +227,38 @@ def train_eor():
         optim.param_groups[0]['lr'] = lrate*(1-ep/n_epoch)
 
         pbar = tqdm(dataloader)
-        loss_ema = None
         for x, c in pbar:
             optim.zero_grad()
             x = x.to(device)
             c = c.to(device)
             loss = ddpm(x, c)
             loss.backward()
-            if loss_ema is None:
-                loss_ema = loss.item()
-            else:
-                loss_ema = 0.95 * loss_ema + 0.05 * loss.item()
-            pbar.set_description(f"loss: {loss_ema:.4f}")
+
+            pbar.set_description(f"loss: {loss.item():.4f}")
             optim.step()
             
-            ema.update()
+            if ema:
+                ema.update()
         
-        ema.apply_shadow()
+        if ema:
+            ema.apply_shadow()
         # for eval, save an image of currently generated samples (top rows)
         # followed by real images (bottom rows)
         ddpm.eval()
         with torch.no_grad():
-            for w_i, w in enumerate(ws_test):
-                x_gen, x_gen_store = ddpm.sample(n_sample, (1, image_size, image_size), device, test_param=test_param, guide_w=w)
+            if ep%sample_freq==0:
+                for w_i, w in enumerate(ws_test):
+                    x_gen, x_gen_store = ddpm.sample(n_sample, (1, image_size, image_size), device, test_param=test_param, guide_w=w)
 
-                sample_save_path_final = os.path.join(save_dir, f"train-{ep}xscale_{w}_test_ema.npy")
-                np.save(str(sample_save_path_final),x_gen.cpu())
+                    sample_save_path_final = os.path.join(save_dir, f"train-{ep}xscale_{w}_test_ema49.npy")
+                    np.save(str(sample_save_path_final),x_gen.cpu())
 
         # optionally save model
-        if save_model and ep == int(n_epoch-1):
-            torch.save(ddpm.state_dict(), save_dir + f"model_{ep}_test_ema.pth")
-            print('saved model at ' + save_dir + f"model_{ep}_test_ema.pth")
-        ema.restore()
+        if save_model and ep%save_freq==0:
+            torch.save(ddpm.state_dict(), save_dir + f"model_{ep}_test_ema49.pth")
+            print('saved model at ' + save_dir + f"model_{ep}_test_ema49.pth")
+        if ema:
+            ema.restore()
 
 if __name__ == "__main__":
     train_eor()
