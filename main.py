@@ -183,7 +183,7 @@ def train_eor():
     data_dir = '/scratch/zxs/scripts/Diffuse/glide-finetune/data'
     save_freq = 40 # the period of saving model
     sample_freq = 10 # the period of sampling
-    ema=True # whether to use ema
+    ema=False # whether to use ema
     ema_rate=0.999
 
     nn_model=create_nnmodel(n_param=n_param,image_size=image_size)
