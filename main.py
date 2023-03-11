@@ -106,7 +106,7 @@ class DDPM(nn.Module):
         this method is used in training, so samples t and noise randomly
         """
 
-        _ts = torch.randint(1, self.n_T, (x.shape[0],)).to(self.device)  # t ~ Uniform(0, n_T)
+        _ts = torch.randint(1, self.n_T+1, (x.shape[0],)).to(self.device)  # t ~ Uniform(0, n_T)
         noise = torch.randn_like(x)  # eps ~ N(0, 1)
 
         x_t = (
@@ -180,7 +180,7 @@ def train_eor():
     n_sample = 64 # 64, the number of samples in sampling process
     drop_prob = 0.28 # the probability to drop the captions (parameters) for unconditional training in classifier free guidance.
     image_size=64
-    data_dir = '/scratch/zxs/scripts/Diffuse/glide-finetune/data'
+    data_dir = './data'
     save_freq = 40 # the period of saving model
     sample_freq = 10 # the period of sampling
     ema=False # whether to use ema
