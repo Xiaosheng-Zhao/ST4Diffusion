@@ -109,6 +109,7 @@ def normalization(channels, swish=0.0):
     :param channels: number of input channels.
     :return: an nn.Module for normalization.
     """
+    #print (channels)
     return GroupNorm32(num_channels=channels, num_groups=32, swish=swish)
 
 
