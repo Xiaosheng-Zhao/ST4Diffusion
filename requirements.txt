@@ -1,4 +1,4 @@
-numpy
-torch
-tqdm
+numpy==1.23.3
+torch==1.12.1
+tqdm==4.64.1
 
