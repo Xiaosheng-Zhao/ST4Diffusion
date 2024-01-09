@@ -7,6 +7,7 @@ You can directly run the `main.py` which will give some outputs to `outputs`.
 <img width="750" src="ST4Diffusion.png"/img>
 </p>
 <p align = "center">
+  DDPM for image generation conditional on the astrophysical parameter
 </p>
 
 The StyleGAN2 implementation is based on the related branch in [this repository](https://github.com/dkn16/stylegan2-pytorch).
