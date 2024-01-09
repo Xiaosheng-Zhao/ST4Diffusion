@@ -3,5 +3,10 @@ The repository for Can Diffusion Model Conditionally Generate Astrophysical Imag
 The requirements to run the codes are rather simple, please check the `requirements.txt`, where I list the versions of the packages I used (with py3.8), while probably your existed PyTorch environment can work. In this repository (mainly in a single file `main.py`), you can know all about the basics of the paper [DDPM](https://arxiv.org/abs/2006.11239). 
 
 You can directly run the `main.py` which will give some outputs to `outputs`.
+<p align = "center">
+<img width="750" src="ST4Diffusion.png"/img>
+</p>
+<p align = "center">
+</p>
 
 The StyleGAN2 implementation is based on the related branch in [this repository](https://github.com/dkn16/stylegan2-pytorch).
