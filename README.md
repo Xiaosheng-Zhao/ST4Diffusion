@@ -10,6 +10,6 @@ You can directly run the `main.py` which will give some outputs to `outputs`.
   DDPM for image generation conditional on the astrophysical parameter
 </p>
 
-The wavelet scattering transform used for quantification is calculated with [This Repository](https://github.com/SihaoCheng/scattering_transform) by Sihao Cheng.
+The wavelet scattering transform used for quantification is calculated with [this repository](https://github.com/SihaoCheng/scattering_transform) by Sihao Cheng.
 
 The StyleGAN2 implementation is based on the related branch in [this repository](https://github.com/dkn16/stylegan2-pytorch).
